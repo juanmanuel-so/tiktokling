@@ -13,6 +13,9 @@ type LiveEvent = { type: "chat" | "gift"; [key: string]: any };
 
     es.onmessage = (msg) => {
       const data: LiveEvent = JSON.parse(msg.data);
+      const utterance = new SpeechSynthesisUtterance(data.content);
+      utterance.lang = 'es-CL';
+      window.speechSynthesis.speak(utterance);
       setEvents((prev) => [...prev.slice(-99), data]);
     };
 
