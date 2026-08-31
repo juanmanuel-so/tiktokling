@@ -4,8 +4,15 @@ import { liveEvents, getTikTokConnection } from "@/lib/tiktok-connection";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function GET() {
-  getTikTokConnection('janinnce'); // asegura que exista
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { user } = await params // 'a', 'b', or 'c'
+  
+  console.log(user)
+  
+  getTikTokConnection(user); // asegura que exista
 
   const encoder = new TextEncoder();
 
@@ -32,4 +39,8 @@ export async function GET() {
       Connection: "keep-alive",
     },
   });
+}
+
+export async function POST() {
+    return {}
 }

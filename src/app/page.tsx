@@ -1,40 +1,41 @@
-// components/TikTokLiveFeed.tsx
-"use client";
+import Link from "next/link";
 
-import { useEffect, useState } from "react";
-
-type LiveEvent = { type: "chat" | "gift"; [key: string]: any };
-
- function TikTokLiveFeed() {
-  const [events, setEvents] = useState<LiveEvent[]>([]);
-
-  useEffect(() => {
-    const es = new EventSource("/api/tiktok-stream");
-
-    es.onmessage = (msg) => {
-      const data: LiveEvent = JSON.parse(msg.data);
-      const utterance = new SpeechSynthesisUtterance(data.content);
-      utterance.lang = 'es-CL';
-      window.speechSynthesis.speak(utterance);
-      setEvents((prev) => [...prev.slice(-99), data]);
-    };
-
-    es.onerror = (err) => {
-      console.error("SSE error", err);
-      // EventSource reintenta reconexión automáticamente por defecto
-    };
-
-    return () => es.close();
-  }, []);
-
+export default function HomePage() {
   return (
-    <ul>
-      {events.map((e, i) => (
-        <li key={i}>{e.type === "chat" ? e.content : `🎁 ${e.user}`}</li>
-      ))}
-    </ul>
+    <main className="flex min-h-screen items-center justify-center bg-zinc-950 px-6">
+      <form
+        action="/"
+        className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-xl"
+      >
+        <h1 className="mb-6 text-center text-2xl font-bold text-white">
+          Buscar usuario
+        </h1>
+
+        <div className="flex gap-3">
+          <input
+            type="text"
+            name="user"
+            placeholder="@usuario"
+            className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white placeholder:text-zinc-500 outline-none transition focus:border-blue-500"
+          />
+
+          <button
+            formAction={async (formData) => {
+              "use server";
+
+              const user = formData.get("user")?.toString().trim();
+
+              if (!user) return;
+
+              const { redirect } = await import("next/navigation");
+              redirect(`/${encodeURIComponent(user)}`);
+            }}
+            className="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-500 active:scale-95"
+          >
+            Ir
+          </button>
+        </div>
+      </form>
+    </main>
   );
 }
-
-
-export default TikTokLiveFeed;
