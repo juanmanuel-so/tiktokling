@@ -22,7 +22,7 @@ export function getTikTokConnection(username: string) {
   });
 
   connection.on(WebcastEvent.GIFT, (data) => {
-    liveEvents.emit("event", { type: "gift", user: data.user, content: 'Regalo ' + data.gift?.name });
+    liveEvents.emit("event", { type: "gift", user: data.user?.nickname, content: 'Regaló ' + data.gift?.name });
   });
 
   return connection;

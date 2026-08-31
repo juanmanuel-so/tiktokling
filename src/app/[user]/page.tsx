@@ -16,6 +16,9 @@ function TikTokLiveFeed() {
 
     es.onmessage = (msg) => {
       const data: LiveEvent = JSON.parse(msg.data);
+      //remove non readable characters from name (symbols, emotes, etc)
+      data.user = data.user?.replace(/[^a-zA-Z0-9]/g, '');
+
       const text = data.type === "chat" ? `${data.user} dice ${data.content}` : `🎁 ${data.user} envió un regalo`;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'es-CL';
