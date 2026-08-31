@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ user: string }> }
 ) {
   const { user } = await params // 'a', 'b', or 'c'
   
