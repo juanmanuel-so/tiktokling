@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import {useParams} from "next/navigation";
+import { narrar } from "@/lib/narrator";
 type LiveEvent = { type: "chat" | "gift";[key: string]: any };
 
 function TikTokLiveFeed() {
@@ -20,9 +21,7 @@ function TikTokLiveFeed() {
       data.user = data.user?.replace(/[^a-zA-Z0-9]/g, '');
 
       const text = data.type === "chat" ? `${data.user} dice ${data.content}` : `🎁 ${data.user} envió un regalo`;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-CL';
-      window.speechSynthesis.speak(utterance);
+      narrar(text);
       setEvents((prev) => [...prev.slice(-99), data]);
     };
 
